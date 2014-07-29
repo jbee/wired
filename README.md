@@ -11,3 +11,44 @@ The wired container is such a patch that improves the situation...
 - tells you what you missed to mock
 - tells you what you unnecessarily mocked
 
+Its quite simple...
+```java
+// make yourself a container
+Wired container = Wired.container(config);
+
+// wire some mocks
+container.wireMock(ThingA.class);
+ThingB b = container.wireMock(ThingB.class);
+
+// wire some impl under test
+TestedA a = container.wire(TestedA.class);
+TestedC c = container.wireStub(new TestedC("Foo"));
+
+// does this make sense?
+container.verifyImplementationWiring();
+
+// do the mocking madness (when/then) with a,b,c as before
+```
+At least the spagetti wiring in setup is now gone. It is more or less a list of the mocked classes and the _real_ implementations under test. You may assign them for later useage or not. Alternativly one can get things back out of the container.
+
+```java
+ThingA a = container.get(ThingA.class);
+```
+Finally there is a `config` that has 3 simple methods to implement:
+```java
+		void init(Wired container) {
+		  // run some common wiring
+		  // enterprises like to setup DAOs, translations etc.
+		}
+
+		<T> T mock(Class<T> type) {
+		  // make me a mock please
+		  return MyMadness.mockOf(type); 
+		}
+
+		boolean isMock(Object mayBeMock) {
+      // is this a mock?
+      return MyMadness.isMock(mayBeMock); 
+		}
+```
+So the container is independent of the mocking madness you prefer to get bitten by. If you read so far I assume you are working in one of those enterprises - let me say a last thing: Good luck, you'll need it.
