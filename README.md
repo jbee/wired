@@ -36,19 +36,19 @@ ThingA a = container.get(ThingA.class);
 ```
 Finally there is a `config` that has 3 simple methods to implement:
 ```java
-		void init(Wired container) {
-		  // run some common wiring
-		  // enterprises like to setup DAOs, translations etc.
-		}
+void init(Wired container) {
+	// run some common wiring
+	// enterprises like to setup DAOs, translations etc.
+}
 
-		<T> T mock(Class<T> type) {
-		  // make me a mock please
-		  return MyMadness.mockOf(type); 
-		}
+<T> T mock(Class<T> type) {
+	// make me a mock please
+	return MyMadness.mockOf(type); 
+}
 
-		boolean isMock(Object mayBeMock) {
-      // is this a mock?
-      return MyMadness.isMock(mayBeMock); 
-		}
+boolean isMock(Object mayBeMock) {
+	// is this a mock?
+	return MyMadness.isMock(mayBeMock); 
+}
 ```
 So the container is independent of the mocking madness you prefer to get bitten by. If you read so far I assume you are working in one of those enterprises - let me say a last thing: Good luck, you'll need it.
